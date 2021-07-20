@@ -1,0 +1,16 @@
+.center{
+    display: flex;
+    justify-content: center;
+    align-items:center;
+}
+
+.checkbox-align{
+    justify-content: left;
+}
+
+.design{
+      height: 10px;
+    width: 300px;
+  line-height: 100px;
+    max-height: 2000px;
+}
