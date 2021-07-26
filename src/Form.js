@@ -8,12 +8,12 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import css from './App.css'
 
 const Form = (props) => {
-    const [id, setID] = useState("");
+    // const [id, setID] = useState("");
+    const [check, setCheck] = useState("");
     const [task, setTask] = useState("");
 
   const HandleButtonClick = function(e) {
-          props.addItemToList({id: id, task: task})
-          setID('')
+          props.addItemToList({task: task})
           setTask('')
   }
 

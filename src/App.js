@@ -54,7 +54,7 @@ function App() {
         <div>
             <div>
                 {
-                    todolist.map((itemToDo) => <ToDoCard key={itemToDo.id} status={itemToDo.status} taskItem={itemToDo.task} id={itemToDo.id} onRemove={onRemove}/>)
+                    todolist.map((itemToDo) => <ToDoCard key={itemToDo.id} status={itemToDo.status} checked={itemToDo.checked} taskItem={itemToDo.task} id={itemToDo.id} onRemove={onRemove}/>)
                 }
             </div>
             <Form addItemToList={menuitem}/>

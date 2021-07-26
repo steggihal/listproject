@@ -8,7 +8,7 @@ export default function ToDoCard(props) {
 
   return(
       <form>
-            <ChkBoxLabel taskItem={props.taskItem} status={props.status} id={props.id} onRemove={props.onRemove}/>
+            <ChkBoxLabel taskItem={props.taskItem} checked = {props.checked} status={props.status} id={props.id} onRemove={props.onRemove}/>
       </form>
   )
 }
