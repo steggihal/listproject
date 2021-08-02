@@ -40,7 +40,7 @@ function App() {
     }, [])
 
     function menuitem(itemBeingInserted) {
-        axios.post('http://localhost:5000/api/items', itemBeingInserted)
+        axios.post('http://localhost:5000/api/items/', itemBeingInserted)
             .then((result) => {
                 setMode(result.data)
             })

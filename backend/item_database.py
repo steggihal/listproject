@@ -34,7 +34,7 @@ class ItemDatabase:
                        )
         conn.commit()
 
-    def return_items(self):
+    def load_non_deleted(self):
         conn = get_db_conn()
         cursor = conn.cursor(cursor_factory=RealDictCursor)
         query = """
@@ -43,4 +43,15 @@ class ItemDatabase:
         cursor.execute(query)
         data = cursor.fetchall()
         return data
-pass
+
+    def get_users(self):
+        conn = get_db_conn()
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
+        query = """
+            SELECT username,password FROM directory.public.validusers;
+            """
+        cursor.execute(query)
+        data = cursor.fetchall()
+        return data
+
+

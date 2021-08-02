@@ -26,7 +26,7 @@ const LoginPage = () => {
 
     return (
         <div className="center">
-            <form class="myButton">
+            <form className="myButton">
                 <h2 className="header"> LOGIN PAGE</h2>
                 <TextField label="Enter username" variant="outlined" color="primary" value={username}
                            onChange={onUsernameChange}/>

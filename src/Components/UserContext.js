@@ -1,54 +1,37 @@
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {useHistory} from "react-router";
-import InvalidLogin from "./InvalidLogin";
+import {Link, Route} from "react-router-dom";
+import axios from "axios";
+import userEvent from "@testing-library/user-event";
+import {render} from "@testing-library/react";
 
 const UserContext = React.createContext({})
 
-const validUsers = [
-    {
-        id: 0,
-        name: 'Sampada',
-        password: 'sam123',
-        state: 'IA'
-    },
-    {
-        id: 1,
-        name: 'Adis',
-        password: 'adis123',
-        state: 'IA',
-    },
-    {
-        id: 2,
-        name: 'Colby',
-        password: 'colby123',
-        state: 'IA',
-    },
-    {
-        id: 3,
-        name: 'Luke',
-        password: 'luke123',
-        state: 'IA',
-    }
-]
-
 export const UserProvider = (props) => {
+    const [userList, setUsers] = useState(null)
     const [loggedInUser, setLoggedInUser] = useState(null)
     const [password, setPassword] = useState(null)
 
+    const context = useContext(UserContext)
+
+    useEffect(() => {
+        axios.get('http://localhost:5000/api/users/').then((result) => {
+            setUsers(result.data)
+        })
+    }, [])
+
+
+    // users.map( (entries) => login(entries.username, entries.password))
     const history = useHistory();
     const login = (username, password) => {
-        const user = validUsers.find(u => u.name === username)
-        const pass = validUsers.find(p => p.password === password)
-
-        for ( i = 0; i <=3; i++) {
-        ObjectRow()
-    }
+        const user = userList.find(u => u.username == username)
+        const pass = userList.find(p => p.password1 === password)
         if (user && pass) {
             setLoggedInUser(user)
             setPassword(pass)
             history.push(`/directory/${user.id}`)
         } else {
-
+            alert("Invalid credentials. Try again");
         }
     }
 
@@ -67,7 +50,9 @@ export const UserProvider = (props) => {
         pass: password
     }
 
-    return (<UserContext.Provider value={value}>{props.children}</UserContext.Provider>)
+    return (
+        <UserContext.Provider value={value}>{props.children}</UserContext.Provider>
+    )
 }
 
 

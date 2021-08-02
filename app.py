@@ -1,89 +1,35 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import json
-from backend.item_database import ItemDatabase
+# from backend.views.accounts_view import AccountsView
+from backend.views.item_list import ItemView
+from backend.views.user_list import UsersList
+from sqlalchemy.engine import URL
+from backend.db import db
 
 app = Flask(__name__)
 CORS(app)
 
+app.config['SQLALCHEMY_DATABASE_URI'] = URL(
+    drivername='postgresql',
+    host='localhost',
+    database='directory',
+    password='Saga@123',
+    port='5432',
+    username='sampada'
+)
 
-def load_task_items():
-    with open('backend/data.json', 'r') as file:
-        raw_data = json.loads(file.read())
-        return raw_data
-
-
-def write_to_file(items):
-    with open('backend/data.json', 'w') as file:
-        file.write(json.dumps(items))
-        return items
-
-
-def generate_new_task_id(items):
-    new_id = max(items["id"] for items in items) + 1
-    return int(new_id)
+db.init_app(app)
 
 
-def status_check(items):
-    final_list = []
-    for item in items:
-        if not item['status']:
-            final_list.append(item)
-    return final_list
+def register_api(view, endpoint, url, pk='id', pk_type='int'):
+    view_func = view.as_view(endpoint)
+    app.add_url_rule(url, defaults={pk: None},
+                     view_func=view_func, methods=['GET',])
+    app.add_url_rule(url, view_func=view_func, methods=['POST',])
+    app.add_url_rule(f'{url}<{pk_type}:{pk}>', view_func=view_func,
+                     methods=['GET', 'PUT', 'DELETE'])
 
 
-@app.route("/api/items", methods=['GET'])
-def get_all_items():
-    raw_data = ItemDatabase().return_items()
-
-    # not_deleted = []
-    # for i in raw_data:
-    #     if not i["status"]:
-    #         not_deleted.append(i)
-    return jsonify(raw_data)
-
-
-@app.route("/api/items/<int:item_id>", methods=['GET'])
-def find_item(item_id):
-    raw_data = load_task_items()
-    item_we_found = next((item for item in raw_data if item['id'] == item_id), None)
-    return jsonify(item_we_found)
-
-
-@app.route("/api/items/<int:index>", methods=['DELETE'])
-def delete_contact(index):
-    _ItemDb = ItemDatabase()
-    all_items = _ItemDb.load()
-    for tasks in all_items:
-        if tasks['id'] == index:
-            _ItemDb.update_status(tasks)
-    final_list = _ItemDb.return_items()
-    return jsonify(final_list)
-    # item_value = load_task_items()
-    # final_elements = []
-    # for tasks in item_value:
-    #     if tasks['id'] == index:
-    #         tasks['status'] = True
-    # # for items in :
-    # #     if not items['status']:
-    # #         final_elements.append(items)
-    # write_to_file(item_value)
-    # final_elements = status_check(item_value)
-    # return jsonify(final_elements)
-
-
-@app.route("/api/items", methods=['POST'])
-def create_new_task():
-    new_items = json.loads(request.data)
-    _ItemDb = ItemDatabase()
-    _ItemDb.save(new_items)
-    final_list = _ItemDb.return_items()
-    return jsonify(final_list)
-    # final_list = []
-    # item_list = load_task_items()
-    # new_items["id"] = generate_new_task_id(item_list)
-    #
-    # item_list.append(new_items)
-    # write_to_file(item_list)
-    # final_list = status_check(item_list)
-
+register_api(ItemView, 'items', '/api/items/', 'item_id')
+register_api(UsersList, 'users', '/api/users/', 'user_id')
