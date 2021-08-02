@@ -1,11 +1,12 @@
 from flask.views import MethodView
-from flask import jsonify, request
+from flask import jsonify, request, flash
 import json
 from marshmallow import ValidationError
 from backend.user_database import UserDatabase
 from backend.db import db
 from backend.models.SQLA_users import Users
 from backend.validation.validate_fields import ValidateFields
+
 
 class UsersList(MethodView):
 
@@ -19,13 +20,19 @@ class UsersList(MethodView):
         validation_schema = ValidateFields()
         try:
             new_item = validation_schema.load(request.json)
-            new_username = Users(username=new_item['username'])
-            new_email = Users(email=new_item['email'])
+            new_username = new_item['username']
+            new_email = new_item['email']
             new_item = Users(username=new_item['username'], email=new_item['email'],
                              password1=new_item['password1'], password2=new_item['password2'])
-            if db.session.query(Users).filter(new_username) and db.session.query(Users).filter(new_email) is not None:
+            print(bool(Users.query.filter(Users.username == new_username).first() and Users.query.filter(
+                    Users.email == new_email).first()))
+            if bool(Users.query.filter(Users.username == new_username).first() or Users.query.filter(
+                    Users.email == new_email).first()) is False:
                 db.session.add(new_item)
                 db.session.commit()
+                return jsonify({'success': True})
+            else:
+                return 'False'
             # return self.get(None)
             # _NewUser = NewUserDatabase()
             # _NewUser.save(new_item)
@@ -33,7 +40,6 @@ class UsersList(MethodView):
             # return jsonify(all_items)
         except ValidationError as e:
             return jsonify(e.messages), 400
-        return jsonify({'success': True})
 
     # def post(self):
     #     new_item = json.loads(request.data)

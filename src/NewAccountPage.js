@@ -26,13 +26,17 @@ const NewAccountPage = () => {
     }
 
     const create = () => {
-      axios.post('http://localhost:5000/api/users/', formState)
-        .then(() => {
-            alert('new account created, login to access your to-do list')
-          history.push('/')
-        }).catch((e) => {
-          setErrors(e.response.data)
-      })
+        axios.post('http://localhost:5000/api/users/', formState)
+            .then((result) => {
+                if (result.data != 'False') {
+                    alert('new account created, login to access your to-do list')
+                } else {
+                    alert('username or email exists, login to access account')
+                }
+                history.push('/')
+            }).catch((e) => {
+            setErrors(e.response.data)
+        })
     }
 
 

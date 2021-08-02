@@ -13,16 +13,6 @@ class ValidateFields(Schema):
         if not any(map(str.isdigit, input)):
             raise ValidationError('must contain at least one digit')
 
-    @validates('username')
-    def validate_password(self, input):
-        if not any(map(str.isdigit, input)):
-            raise ValidationError('username already exists')
-
-    @validates('email')
-    def validate_password(self, input):
-        if not any(map(str.isdigit, input)):
-            raise ValidationError('email already exists. Login to access your account')
-
     @validates('password2')
     def validate_password2(self, input):
         if not any(map(str.isdigit, input)):

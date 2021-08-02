@@ -36,9 +36,7 @@ class ItemView(MethodView):
         # return jsonify(all_items)
 
     def delete(self, item_id):
-        raw_data = db.session.query(ToDoItems).all()
-        response = [item.to_json() for item in raw_data]
-        to_delete = db.session.query(ToDoItems).filter(ToDoItems.id == item_id).update({ToDoItems.status: True})
+        db.session.query(ToDoItems).filter(ToDoItems.id == item_id).update({ToDoItems.status: True})
         db.session.commit()
         raw_task = db.session.query(ToDoItems).all()
         response = [item.to_json() for item in raw_task]
