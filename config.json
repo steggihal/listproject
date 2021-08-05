@@ -1,0 +1,6 @@
+{
+  "SQLALCHEMY_TRACK_MODIFICATIONS": false,
+  "SQLALCHEMY_DATABASE_URI": "postgresql://sampada:Saga%40123@localhost:5432/directory",
+  "SQLALCHEMY_ECHO": true,
+  "SECRET_KEY": "Q9e3a1i8QEKmznUjTzXqrTCreGxg0og7vPwK3zZddeDJHUHYvlMqh3R1D27KpEoucKXu6vCAML21MNzfBwFdgQ=="
+}

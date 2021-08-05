@@ -9,8 +9,7 @@ class Users(db.Model):
     email = db.Column(db.Text)
     password1 = db.Column(db.Text)
     password2 = db.Column(db.Text)
-
-    # items = db.relationship('todoitems', lazy='joined')
+    items = db.relationship('ToDoItems', lazy=False)
 
     def to_json(self):
         return dict(

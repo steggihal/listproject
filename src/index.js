@@ -13,14 +13,17 @@ const Index = () => {
         <BrowserRouter>
             <UserProvider>
                 <Switch>
-                    <Route path="/directory/:user_id" exact>
+                    <Route path="/directory" exact>
                         <App/>
                     </Route>
                     <Route path="/create-new-account">
                         <NewAccountPage/>
                     </Route>
-                    <Route path="/">
+                    <Route path="/login">
                         <LoginPage/>
+                    </Route>
+                    <Route path="/" exact>
+                        <h2> Please route to appropriate URL. This is invalid </h2>
                     </Route>
                 </Switch>
             </UserProvider>

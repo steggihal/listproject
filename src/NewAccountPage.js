@@ -26,14 +26,14 @@ const NewAccountPage = () => {
     }
 
     const create = () => {
-        axios.post('http://localhost:5000/api/users/', formState)
+        axios.post('http://localhost:5000/api/users', formState)
             .then((result) => {
-                if (result.data != 'False') {
+                if (result.data !== 'False') {
                     alert('new account created, login to access your to-do list')
                 } else {
                     alert('username or email exists, login to access account')
                 }
-                history.push('/')
+                history.push('/login')
             }).catch((e) => {
             setErrors(e.response.data)
         })

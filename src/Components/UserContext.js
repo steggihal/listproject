@@ -14,45 +14,38 @@ export const UserProvider = (props) => {
 
     const context = useContext(UserContext)
 
-    useEffect(() => {
-        axios.get('http://localhost:5000/api/users/').then((result) => {
-            setUsers(result.data)
-        })
-    }, [])
-
 
     // users.map( (entries) => login(entries.username, entries.password))
     const history = useHistory();
     const login = (username, password) => {
-        const user = userList.find(u => u.username == username)
-        const pass = userList.find(p => p.password1 === password)
-        if (user && pass) {
-            setLoggedInUser(user)
-            setPassword(pass)
-            history.push(`/directory/${user.id}`)
-        } else {
-            alert("Invalid credentials. Try again");
-        }
+        axios.post('http://localhost:5000/auth', {
+            username,
+            password
+        }).then(resp => {
+            localStorage.setItem('session_token', resp.data.access_token)
+            history.push('/directory')
+        })
     }
+// else
+//     {
+//         alert("Invalid credentials. Try again");
+//     }
 
-    const logout = () => {
-        setLoggedInUser(null)
-        setPassword(null)
-        history.push(`/`)
+const logout = () => {
+    localStorage.removeItem('session_token')
+    history.push(`/login`)
+}
+
+const value = {
+    actions: {
+        login: login,
+        logout: logout
     }
+}
 
-    const value = {
-        actions: {
-            login: login,
-            logout: logout
-        },
-        user: loggedInUser,
-        pass: password
-    }
-
-    return (
-        <UserContext.Provider value={value}>{props.children}</UserContext.Provider>
-    )
+return (
+    <UserContext.Provider value={value}>{props.children}</UserContext.Provider>
+)
 }
 
 

@@ -4,9 +4,10 @@ from marshmallow.validate import Length
 
 class ValidateFields(Schema):
     username = fields.Str(required=True, validate=Length(min=4))
-    email = fields.Email(required=True, )
+    email = fields.Email(required=True)
     password1 = fields.Str(required=True, validate=Length(min=8))
     password2 = fields.Str(required=True, validate=Length(min=8))
+
 
     @validates('password1')
     def validate_password(self, input):
